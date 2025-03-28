@@ -1,4 +1,31 @@
-# Example Ruby Script Development Template
+# Identifying Duplicate S3 objects
+
+Expected headers for input CSV files:
+ * `bucket` (The name of the bucket.)
+ * `key` (The location of the file in the bucket.  Looks like a path.)
+ * `etag` (S3 “etag” field value – Although this is not guaranteed to be an an md5 hash of the file, it often is.  Sometimes it’s a hash of hashes, and in those cases it ends with a hyphen and a number representing the number of file chunks that were hashed.)
+* `size` (The size of the file in bytes.)
+
+| bucket   | key     | etag | size (in Bytes) |
+| -------- | ------- | ---- | ---- |
+| example | exampleS3/home/subdir/file.ext | md5_hash | 30567 |
+
+The script will create multiple CSV files.
+
+All will have the following headers:
+ * `object1_s3_uri` (Format: “s3://#{bucket}/#{key}” – This is an S3 URI version of the bucket and key values from CSV 1.  This cell should be blank if no exact or potential match is found that matches to an object in CSV 2.)
+ * `object2_s3_uri` (Format: “s3://#{bucket}/#{key}” – This is an S3 URI version of the bucket and key values from CSV 2.  This cell should be blank if no exact or potential match is found that matches to an object in CSV 1.)
+ * `object1_etag` (The etag value from CSV 1 for the object identified by the object1_s3_uri value.  Leave blank if object1_s3_uri is blank.)
+ * `object2_etag` (The etag value from CSV 2 for the object identified by the object2_s3_uri value.  Leave blank if object2_s3_uri is blank.)
+ * `object1_size` (The size value from CSV 1 for the object identified by the object1_s3_uri value.  Leave blank if object1_s3_uri is blank.)
+ * `object2_size` (The size value from CSV 2 for the object identified by the object2_s3_uri value.  Leave blank if object2_s3_uri is blank.)
+ * `comparison_result` (One of the following values: [`“exact match”`, `“possible match”`, `“no match”`])
+
+The first, `matches.csv`, lists all of the identified duplicate records shared by the two CSVs.
+
+
+
+## Example Ruby Script Development Template
 
 This is a quick setup template for ruby scripts.  It includes:
 
